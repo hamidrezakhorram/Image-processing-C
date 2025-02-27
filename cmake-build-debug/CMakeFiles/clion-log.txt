@@ -1,0 +1,11 @@
+"C:\Program Files\JetBrains\CLion 2022.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.2/bin/ninja/win/ninja.exe" -G Ninja -S D:\zipopen -B D:\zipopen\cmake-build-debug
+CMake Warning at C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/minizip/minizipConfig.cmake:1 (message):
+  'find_package(minizip CONFIG)' is deprecated.  Please use
+  'find_package(unofficial-minizip CONFIG)' instead.
+Call Stack (most recent call first):
+  CMakeLists.txt:14 (find_package)
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/zipopen/cmake-build-debug

@@ -1,0 +1,3 @@
+D:/zipopen/cmake-build-debug/CMakeFiles/zipopen.dir
+D:/zipopen/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/zipopen/cmake-build-debug/CMakeFiles/rebuild_cache.dir
