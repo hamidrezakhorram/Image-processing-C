@@ -465,7 +465,24 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber) {
 }
 
 
-void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth) {
+void changePhotoName(double angel1 , double angel2 , char *name){
+    int len = strlen(name);
+    for (int i = len-4; i <len ; ++i) {
+        name[i]='\0';
+    }
+    char angel1Char[50];
+    char angel2Char[50];
+    sprintf(angel1Char ,"_%.2f" ,angel1);
+    sprintf(angel2Char ,"_%.2f" ,angel2);
+    strcat(name , angel1Char);
+    strcat(name , angel2Char);
+    strcat(name , ".bmp");
+
+
+}
+
+
+void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] ) {
     mkdir("photos");
     for (int i = 0; i < number; ++i) {
         char name[50];
@@ -475,7 +492,9 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
     }
     char source[50], destination[50];
     for (int i = 0; i < number; ++i) {
+
         sprintf(source, "%s", photoName[i]);
+        changePhotoName(angel1[i],angel2[i], photoName[i]);
         sprintf(destination, "photos/%s", photoName[i]);
         if (access(source, F_OK) != -1) {
             // Move file
@@ -789,7 +808,7 @@ int main() {
     } else {
         printf("the logo cant read properly\n");
     }
-    transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth);
+    transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2);
 
     for (int i = 0; i < logoHigh; i++) {
         for (int j = 0; j < logoWidth; j++) {
@@ -799,6 +818,8 @@ int main() {
     }
     free(logo);
     moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
+    char name[50] ="123450.bmp";
+
     char end;
     scanf("%s" ,&end);
     return 0;
