@@ -277,7 +277,7 @@ void readXml(int *check, int name, char **nameXml, int *nameCount) {
     char photoName[50];
 
     FILE *fptr;
-    fptr = fopen("file.xml", "r");
+    fptr = fopen("sheet.xml", "r");
     if (fptr == NULL) printf("File error, can't read! n");
     else {
 
@@ -629,48 +629,85 @@ int readImage(unsigned char ***logo, int logoHeight, int logoWidth, char *inputF
     printf("the logo successfully added to the %s\n", inputFilename);
     return 0;
 }
+int copy_existing_files(zipFile new_zip, const char *old_zip_filename) {
+    int CHUNK = 16384;
+    unzFile old_zip = unzOpen(old_zip_filename);
+    if (!old_zip) return 0; // If file doesn't exist, no need to copy
+
+    char filename_in_zip[256];
+    char buffer[CHUNK];
+
+    if (unzGoToFirstFile(old_zip) != UNZ_OK) return 0;
+
+    do {
+        // Get file info
+        unz_file_info file_info;
+        unzGetCurrentFileInfo(old_zip, &file_info, filename_in_zip, sizeof(filename_in_zip), NULL, 0, NULL, 0);
+
+        // Open file inside old ZIP
+        if (unzOpenCurrentFile(old_zip) != UNZ_OK) return 0;
+
+        // Add file to new ZIP
+        if (zipOpenNewFileInZip(new_zip, filename_in_zip, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
+            unzCloseCurrentFile(old_zip);
+            return 0;
+        }
+
+        // Copy file contents
+        int bytes_read;
+        while ((bytes_read = unzReadCurrentFile(old_zip, buffer, CHUNK)) > 0) {
+            zipWriteInFileInZip(new_zip, buffer, bytes_read);
+        }
+
+        // Close current file
+        unzCloseCurrentFile(old_zip);
+        zipCloseFileInZip(new_zip);
+    } while (unzGoToNextFile(old_zip) == UNZ_OK);
+
+    unzClose(old_zip);
+    return 1;
+}
 
 int moveXml(const char *zip_filename, const char *xml_filename ,const char *zip_entry_name) {
     int CHUNK = 16384;
-    zipFile zf = zipOpen(zip_filename, APPEND_STATUS_CREATE);  // Open or create ZIP file
-    if (!zf) {
-        fprintf(stderr, "Failed to open ZIP file\n");
+    zipFile new_zip = zipOpen("temp.zip", APPEND_STATUS_CREATE);
+    if (!new_zip) {
+        fprintf(stderr, "Failed to open new ZIP file\n");
         return 1;
     }
+
+    // Copy existing files if ZIP exists
+    copy_existing_files(new_zip, zip_filename);
 
     // Open XML file
     FILE *file = fopen(xml_filename, "rb");
     if (!file) {
         fprintf(stderr, "Failed to open XML file\n");
-        zipClose(zf, NULL);
+        zipClose(new_zip, NULL);
         return 1;
     }
 
-    // Add file inside the ZIP archive at the given path
-    if (zipOpenNewFileInZip(zf, zip_entry_name, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
+    // Add new XML file
+    if (zipOpenNewFileInZip(new_zip, zip_entry_name, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
         fprintf(stderr, "Failed to add file to ZIP\n");
         fclose(file);
-        zipClose(zf, NULL);
+        zipClose(new_zip, NULL);
         return 1;
     }
 
-    // Read and write file contents
     char buffer[CHUNK];
     int bytes_read;
     while ((bytes_read = fread(buffer, 1, CHUNK, file)) > 0) {
-        if (zipWriteInFileInZip(zf, buffer, bytes_read) != ZIP_OK) {
-            fprintf(stderr, "Failed to write file contents to ZIP\n");
-            fclose(file);
-            zipCloseFileInZip(zf);
-            zipClose(zf, NULL);
-            return 1;
-        }
+        zipWriteInFileInZip(new_zip, buffer, bytes_read);
     }
 
-    // Cleanup
     fclose(file);
-    zipCloseFileInZip(zf);
-    zipClose(zf, NULL);
+    zipCloseFileInZip(new_zip);
+    zipClose(new_zip, NULL);
+
+    // Replace old ZIP with new ZIP
+    remove(zip_filename);
+    rename("temp.zip", zip_filename);
 
     printf("Successfully added %s as %s in %s\n", xml_filename, zip_entry_name, zip_filename);
     return 0;
