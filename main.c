@@ -209,7 +209,7 @@ void readFile(double *angel1, double *angel2, char **bmpFile, int bmpCount) {
 }
 
 void sort(double angel1[], double angel2[], char **photoName, const int angelCount) {
-    double difference[400];
+    double difference[3000];
     for (int i = 0; i < angelCount; ++i) {
         difference[i] = fabs(angel1[i] - angel2[i]);
     }
@@ -374,11 +374,11 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber) {
     for (int i = 0; i < 3000; i++) {
         check[i] = 1;
     }
-    char *nameXml[400] = {NULL};
+    char *nameXml[3000] = {NULL};
     int count = 0;
     int rowCount = 0;
     findRows(bmpFile, transformNumber, check, nameXml);
-    const char *filename = "file.xml";
+    const char *filename = "sheet.xml";
 
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
@@ -629,10 +629,26 @@ int readImage(unsigned char ***logo, int logoHeight, int logoWidth, char *inputF
     printf("the logo successfully added to the %s\n", inputFilename);
     return 0;
 }
-int copy_existing_files(zipFile new_zip, const char *old_zip_filename) {
+int fileExistsZip(unzFile zip, const char *fileCheck) {
+    if (unzGoToFirstFile(zip) != UNZ_OK) return 0;  // Move to first file in ZIP
+    char filename_in_zip[256];
+
+    do {
+        unz_file_info file_info;
+        unzGetCurrentFileInfo(zip, &file_info, filename_in_zip, sizeof(filename_in_zip), NULL, 0, NULL, 0);
+
+        if (strcmp(filename_in_zip, fileCheck) == 0) {
+            return 1;
+        }
+    } while (unzGoToNextFile(zip) == UNZ_OK);
+
+    return 0;
+}
+
+int copyExistingFiles(zipFile newZip, const char *oldZipFileName, const char *skipFile) {
     int CHUNK = 16384;
-    unzFile old_zip = unzOpen(old_zip_filename);
-    if (!old_zip) return 0; // If file doesn't exist, no need to copy
+    unzFile old_zip = unzOpen(oldZipFileName);
+    if (!old_zip) return 0;
 
     char filename_in_zip[256];
     char buffer[CHUNK];
@@ -640,79 +656,89 @@ int copy_existing_files(zipFile new_zip, const char *old_zip_filename) {
     if (unzGoToFirstFile(old_zip) != UNZ_OK) return 0;
 
     do {
-        // Get file info
+
         unz_file_info file_info;
         unzGetCurrentFileInfo(old_zip, &file_info, filename_in_zip, sizeof(filename_in_zip), NULL, 0, NULL, 0);
 
-        // Open file inside old ZIP
+
+        if (strcmp(filename_in_zip, skipFile) == 0) continue;
+
+
         if (unzOpenCurrentFile(old_zip) != UNZ_OK) return 0;
 
-        // Add file to new ZIP
-        if (zipOpenNewFileInZip(new_zip, filename_in_zip, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
+
+        if (zipOpenNewFileInZip(newZip, filename_in_zip, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
             unzCloseCurrentFile(old_zip);
             return 0;
         }
 
-        // Copy file contents
+
         int bytes_read;
         while ((bytes_read = unzReadCurrentFile(old_zip, buffer, CHUNK)) > 0) {
-            zipWriteInFileInZip(new_zip, buffer, bytes_read);
+            zipWriteInFileInZip(newZip, buffer, bytes_read);
         }
 
-        // Close current file
+
         unzCloseCurrentFile(old_zip);
-        zipCloseFileInZip(new_zip);
+        zipCloseFileInZip(newZip);
     } while (unzGoToNextFile(old_zip) == UNZ_OK);
 
     unzClose(old_zip);
     return 1;
 }
 
-int moveXml(const char *zip_filename, const char *xml_filename ,const char *zip_entry_name) {
+int  moveXml(const char *zipFileName, const char *xmlFilenName ,const char *zipEentryName) {
     int CHUNK = 16384;
-    zipFile new_zip = zipOpen("temp.zip", APPEND_STATUS_CREATE);
-    if (!new_zip) {
+    unzFile oldZip = unzOpen(zipFileName);
+    int fileExists = 0;
+
+    if (oldZip) {
+        fileExists = fileExistsZip(oldZip, zipEentryName);
+        unzClose(oldZip);
+    }
+
+    // Create a new temporary ZIP
+    zipFile newZip = zipOpen("temp.zip", APPEND_STATUS_CREATE);
+    if (!newZip) {
         fprintf(stderr, "Failed to open new ZIP file\n");
         return 1;
     }
 
-    // Copy existing files if ZIP exists
-    copy_existing_files(new_zip, zip_filename);
+    copyExistingFiles(newZip, zipFileName, fileExists ? zipEentryName : NULL);
 
-    // Open XML file
-    FILE *file = fopen(xml_filename, "rb");
+    FILE *file = fopen(xmlFilenName, "rb");
     if (!file) {
         fprintf(stderr, "Failed to open XML file\n");
-        zipClose(new_zip, NULL);
+        zipClose(newZip, NULL);
         return 1;
     }
 
-    // Add new XML file
-    if (zipOpenNewFileInZip(new_zip, zip_entry_name, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
+    if (zipOpenNewFileInZip(newZip, zipEentryName, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) != ZIP_OK) {
         fprintf(stderr, "Failed to add file to ZIP\n");
         fclose(file);
-        zipClose(new_zip, NULL);
+        zipClose(newZip, NULL);
         return 1;
     }
 
     char buffer[CHUNK];
     int bytes_read;
     while ((bytes_read = fread(buffer, 1, CHUNK, file)) > 0) {
-        zipWriteInFileInZip(new_zip, buffer, bytes_read);
+        zipWriteInFileInZip(newZip, buffer, bytes_read);
     }
 
     fclose(file);
-    zipCloseFileInZip(new_zip);
-    zipClose(new_zip, NULL);
+    zipCloseFileInZip(newZip);
+    zipClose(newZip, NULL);
 
-    // Replace old ZIP with new ZIP
-    remove(zip_filename);
-    rename("temp.zip", zip_filename);
+    remove(zipFileName);
+    rename("temp.zip", zipFileName);
 
-    printf("Successfully added %s as %s in %s\n", xml_filename, zip_entry_name, zip_filename);
+    printf("Successfully %s %s in %s\n", fileExists ? "replaced" : "added", zipEentryName, zipFileName);
     return 0;
-
 }
+
+
+
 
 int main() {
 
@@ -737,8 +763,8 @@ int main() {
         printf("No BMP files found in the folder.\n");
     }
 
-    double angel1[400] = {0};
-    double angel2[400] = {0};
+    double angel1[3000] = {0};
+    double angel2[3000] = {0};
     int check[3000];
     for (int i = 0; i < 3000; ++i) {
         check[i] = 1;
@@ -773,7 +799,8 @@ int main() {
     }
     free(logo);
     moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
-    getchar();
+    char end;
+    scanf("%s" ,&end);
     return 0;
 }
 
