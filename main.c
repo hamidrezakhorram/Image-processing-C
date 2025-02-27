@@ -639,7 +639,9 @@ int main() {
    }
 
 
-    const char *fileName = "A.zip";
+   char fileName[50];
+    printf("Please enter the name of your ZIP file:\n");
+    scanf("%s",fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
     char *bmpFiles[3000];
