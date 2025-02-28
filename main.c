@@ -755,7 +755,31 @@ int  moveXml(const char *zipFileName, const char *xmlFilenName ,const char *zipE
     printf("Successfully %s %s in %s\n", fileExists ? "replaced" : "added", zipEentryName, zipFileName);
     return 0;
 }
+void getZipName(char **zipName){
+    char folderPath[50];
+    strcpy(folderPath, "./");
 
+    struct dirent *entry;
+    DIR *dir = opendir(folderPath);
+    int count = 0;
+
+    if (dir == NULL) {
+        printf("Could not open directory: %s\n", folderPath);
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strstr(entry->d_name, ".zip") != NULL) {
+
+          *zipName = strdup(entry->d_name);
+            printf("The zip file %s founded\n",*zipName);
+            break;
+        }
+    }
+
+    closedir(dir);
+
+}
 
 
 
@@ -768,11 +792,8 @@ int main() {
     } else {
         printf("faild to convert png to bmp");
     }
-
-
-    char fileName[50];
-    printf("Please enter the name of your ZIP file:\n");
-    scanf("%s", fileName);
+    char *fileName;
+    getZipName(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
     char *bmpFiles[3000];
