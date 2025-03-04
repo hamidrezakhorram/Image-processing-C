@@ -269,116 +269,218 @@ int getName(const char *time) {
 
     return -1;
 }
+int checkStart(const char *str){
+    char *endptr;
+        double val = strtod(str, &endptr);  // Convert to double
 
+        // Check if conversion was successful and no invalid characters remain
+        return (endptr != str && *endptr == '\0');
+}
+//void readXml(int *check, int name, char **nameXml, int *nameCount) {
+//
+//    int checkCount = 0;
+//    int rowCount = 0;
+//    char line[8000];
+//    char photoName[50];
+//
+//    FILE *fptr;
+//    fptr = fopen("sheet.xml", "r");
+//    if (fptr == NULL) printf("File error, can't read! n");
+//    else {
+//
+//
+//        while (fgets(line, sizeof(line), fptr)) {
+//            char *start = strstr(line, "<x:v>");
+//            printf("line is %s", line);
+//
+//
+//            while (start) {
+//                start += 5;
+//                char *end = strstr(start, "</x:v>");
+//                if (end) {
+//                    *end = '\0';
+//                    rowCount++;
+//
+//                    printf("start is %s\n" , start);
+//                    if (strtod(start, NULL) == 0.0f) {
+//                        rowCount = 0;
+//
+//
+//                    } else if (checkStart(start) ==0 && rowCount == 4) {
+//                        sprintf(photoName, "%d", getName(start));
+//                        //printf("start is %s\n" , start);
+//                        int value = getName(start);
+//                        if (name == value) {
+//                            check[checkCount] = 0;
+//
+//
+//                            nameXml[*nameCount] = malloc(strlen(start) + 1);
+//                            if (!nameXml[*nameCount]) {
+//                                printf("Memory allocation error!\n");
+//                                fclose(fptr);
+//                                return;
+//                            }
+//                            strcpy(nameXml[*nameCount], start);
+//                            (*nameCount)++;
+//                           checkCount++;
+//                            return;
+//                        } else {
+//
+//                            checkCount++;
+//                        }
+//
+//                    } else if (strtod(start, NULL) && rowCount == 7) {
+//                        sprintf(photoName, "%d", getName(start));
+//                        //printf("start is %s\n" , start);
+//                        int value = getName(start);
+//                        if (name == value) {
+//
+//
+//                            nameXml[*nameCount] = malloc(strlen(start) + 1);
+//                            if (!nameXml[*nameCount]) {
+//                                printf("Memory allocation error!\n");
+//                                fclose(fptr);
+//                                return;
+//                            }
+//                            strcpy(nameXml[*nameCount], start);
+//
+//                            (*nameCount)++;
+//                            check[checkCount] = 0;
+//                            checkCount++;
+//                            return;
+//
+//                        } else {
+//
+//                           checkCount++;
+//                        }
+//
+//                    }
+//                }
+//                start = (end) ? strstr(end + 1, "<x:v>") : NULL;
+//            }
+//
+//
+//        }
+//
+//
+//        fclose(fptr);
+//    }
+//    printf("The photo row doesn't exist on the XML\n");
+//
+//}
 void readXml(int *check, int name, char **nameXml, int *nameCount) {
     int checkCount = 0;
     int rowCount = 0;
-    char line[4096];
+    char line[50000];
     char photoName[50];
 
-    FILE *fptr;
-    fptr = fopen("sheet.xml", "r");
-    if (fptr == NULL) printf("File error, can't read! n");
-    else {
-
-
-        while (fgets(line, sizeof(line), fptr)) {
-            char *start = strstr(line, "<x:v>");
-
-
-            while (start) {
-                start += 5;
-                char *end = strstr(start, "</x:v>");
-                if (end) {
-                    *end = '\0';
-                    rowCount++;
-
-                    if (strtod(start, NULL) == 0.0f) {
-                        rowCount = 0;
-
-
-                    } else if (strtod(start, NULL) && rowCount == 4) {
-                        sprintf(photoName, "%d", getName(start));
-
-                        int value = getName(start);
-                        if (name == value) {
-                            check[checkCount] = 0;
-
-                            nameXml[*nameCount] = malloc(strlen(start) + 1);
-                            if (!nameXml[*nameCount]) {
-                                printf("Memory allocation error!\n");
-                                fclose(fptr);
-                                return;
-                            }
-                            strcpy(nameXml[*nameCount], start);
-                            (*nameCount)++;
-                            (checkCount)++;
-                            return;
-                        } else {
-
-                            (checkCount)++;
-                        }
-
-                    } else if (strtod(start, NULL) && rowCount == 7) {
-                        sprintf(photoName, "%d", getName(start));
-
-                        int value = getName(start);
-                        if (name == value) {
-
-                            nameXml[*nameCount] = malloc(strlen(start) + 1);
-                            if (!nameXml[*nameCount]) {
-                                printf("Memory allocation error!\n");
-                                fclose(fptr);
-                                return;
-                            }
-                            strcpy(nameXml[*nameCount], start);
-
-                            (*nameCount)++;
-                            check[checkCount] = 0;
-                            (checkCount)++;
-                            return;
-
-                        } else {
-
-                            (checkCount)++;
-                        }
-
-                    }
-                }
-                start = (end) ? strstr(end + 1, "<x:v>") : NULL;
-            }
-
-
-        }
-
-
-        fclose(fptr);
+    FILE *fptr = fopen("sheet.xml", "r");
+    if (!fptr) {
+        printf("File error, can't read!\n");
+        return;
     }
-    printf("The photo row doesn't exist on the XML\n");
+    printf("name is %d\n" , name);
+    while (fgets(line, sizeof(line), fptr)) {
+        char *start = strstr(line, "<x:v>");
 
+        while (start) {
+            start += 5; // Move past "<x:v>"
+            char *end = strstr(start, "</x:v>");
+            if (end) {
+                *end = '\0'; // Null-terminate extracted value
+                rowCount++;
+
+                if (strtod(start, NULL) == 0.0f) {
+                    rowCount = 0;
+                } else if (checkStart(start) == 0 && rowCount == 4) {
+
+                    int value = getName(start);
+                    if (name == value) {
+                        printf("value is %s\n" ,start );
+                        check[checkCount] = 0;
+                        nameXml[*nameCount] = malloc(strlen(start) + 1);
+                        if (!nameXml[*nameCount]) {
+                            printf("Memory allocation error!\n");
+                            fclose(fptr);
+                            return;
+                        }
+                        strcpy(nameXml[*nameCount], start);
+                        (*nameCount)++;
+                    }
+                    checkCount++;
+                } else if (strtod(start, NULL) && rowCount == 7) {
+
+                    int value = getName(start);
+                    if (name == value) {
+                        printf("value is %s\n" ,start );
+                        nameXml[*nameCount] = malloc(strlen(start) + 1);
+                        if (!nameXml[*nameCount]) {
+                            printf("Memory allocation error!\n");
+                            fclose(fptr);
+                            return;
+                        }
+                        strcpy(nameXml[*nameCount], start);
+                        (*nameCount)++;
+                        check[checkCount] = 0;
+                    }
+                    checkCount++;
+                }
+            }
+            start = strstr(end + 1, "<x:v>"); // Move to the next occurrence
+        }
+    }
+
+    fclose(fptr);
+    printf("The photo row doesn't exist on the XML\n");
 }
 
-void findRows(char **bmpfile, int transforNumber, int *check, char **namexml) {
-    int nameCount = 0;
+
+void findRows(char **bmpfile, int transforNumber, int *check, char **namexml , int* namexmlCount) {
+
     for (int i = 0; i < transforNumber; ++i) {
         int name = strtol(bmpfile[i], NULL, 10);
-        readXml(check, name, namexml, &nameCount);
+        readXml(check, name, namexml, namexmlCount);
     }
 
 
 }
 
+void extractDateTime(char *row, char *dateTime) {
+    char *start = strstr(row, "<x:v>");
+    while (start) {
+        start += 5;  // Move past "<x:v>"
+        char *end = strstr(start, "</x:v>");
+        if (!end) break;  // Stop if closing tag is missing
+
+        size_t len = end - start;
+        if (len < 100) {  // Assuming max 100 characters for safety
+            strncpy(dateTime, start, len);
+            dateTime[len] = '\0'; // Null-terminate
+        }
+
+        // Check if extracted value is a valid date-time (simple heuristic)
+        if (strchr(dateTime, '/') && strchr(dateTime, ':')) {
+            return;  // Stop after finding the first valid date-time
+        }
+
+        start = strstr(end + 1, "<x:v>"); // Look for next <x:v>
+    }
+}
 int removeLineFromXML(char **bmpFile, int *check, int transformNumber) {
-    char rowStart[20] = "<x:row>";
-    char rowEnd[20] = "</x:row>";
+    char rowStart[] = "<x:row>";
+    char rowEnd[] = "</x:row>";
+    int namexmlCount =0;
+    // Initialize check array
     for (int i = 0; i < 3000; i++) {
         check[i] = 1;
     }
+
     char *nameXml[3000] = {NULL};
-    int count = 0;
-    int rowCount = 0;
-    findRows(bmpFile, transformNumber, check, nameXml);
+    findRows(bmpFile, transformNumber, check, nameXml , &namexmlCount );
+
+
     const char *filename = "sheet.xml";
+    const char *newFilename = "sheet_modified.xml";
 
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
@@ -386,86 +488,104 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber) {
         return 1;
     }
 
+    FILE *output = fopen(newFilename, "wb");
+    if (!output) {
+        perror("Error creating output file");
+        fclose(fp);
+        return 1;
+    }
 
     fseek(fp, 0, SEEK_END);
     long filesize = ftell(fp);
     rewind(fp);
 
-
     char *buffer = malloc(filesize + 1);
     if (!buffer) {
         perror("Memory allocation error");
         fclose(fp);
+        fclose(output);
         return 1;
     }
+
     fread(buffer, 1, filesize, fp);
     buffer[filesize] = '\0';
     fclose(fp);
 
-
-    char *output = malloc(2 * filesize + 1);
-    if (!output) {
-        perror("Memory allocation error");
-        free(buffer);
-        return 1;
-    }
-    output[0] = '\0';
-
-
     char *pos = buffer;
     char *row_start, *row_end;
+    int rowCount=0;
     while ((row_start = strstr(pos, rowStart)) != NULL) {
-        strncat(output, pos, row_start - pos);
-
         row_end = strstr(row_start, rowEnd);
-
-        if (!row_end) {
-            break;
-        }
+        if (!row_end) break;
         row_end += strlen(rowEnd);
 
-        int row_removed = 1;
+        char datetime[100]="";
 
 
-        for (int i = 0; i < transformNumber; ++i) {
-            if (nameXml[i] != NULL && strstr(row_start, nameXml[i]) != NULL) {
-                row_removed = 0;
+
+        char rowBuffer[5000];  // Adjust the size as needed
+        snprintf(rowBuffer, sizeof(rowBuffer), "%.*s", (int)(row_end - row_start), row_start);
+       // printf("the row is %s\n" , rowBuffer);
+        extractDateTime(rowBuffer, datetime);
+        printf("the datetime is %s\n" , datetime);
+       printf("\nProcessing Row:\n%.*s\n", (int)(row_end - row_start), row_start);  // Debugging Output
+    if (rowCount>2){
+        int row_should_be_kept = 0;
+//        for (int i = 0; i < namexmlCount; ++i) {
+//            if (nameXml[i] != NULL && strstr(row_start, nameXml[i]) != NULL) {
+//                row_should_be_kept = 1;
+//                printf(">>> Match Found: %s\n", nameXml[i]);  // Debugging
+//                break;
+//            }
+//        }
+        for (int i = 0; i < namexmlCount; ++i) {
+
+            if (strcmp(nameXml[i], datetime) == 0){
+                row_should_be_kept = 1;
+                printf(">>> Match Found: %s\n", nameXml[i]);
                 break;
             }
         }
 
-
-        if (!row_removed) {
-            strncat(output, row_start, row_end - row_start);
-            printf("Row added to XML\n");
+        if (row_should_be_kept) {
+            fwrite(pos, 1, row_start - pos, output);  // Write unchanged part
+            fwrite(row_start, 1, row_end - row_start, output);  // Write the valid row
+        } else {
+            printf(">>> Row Removed!\n");
         }
-        rowCount++;
+    } else {
+        fwrite(pos, 1, row_start - pos, output);  // Write unchanged part
+        fwrite(row_start, 1, row_end - row_start, output);
+    }
+
+
         pos = row_end;
-
+         rowCount++;// Move position forward
     }
 
 
-    strcat(output, pos);
 
 
-    fp = fopen(filename, "wb");
-    if (!fp) {
-        perror("Error opening XML file for writing");
-        free(buffer);
-        free(output);
-        return 1;
-    }
-    fwrite(output, 1, strlen(output), fp);
-    fclose(fp);
-
+    fwrite(pos, 1, strlen(pos), output);  // Write remaining data
+    fclose(output);
     free(buffer);
-    free(output);
 
+    // Overwrite original file only if modification is successful
+    //remove(filename);
+    //rename(newFilename, filename);
+
+    printf("File modified successfully: %s\n", filename);
     return 0;
 }
 
 
+
+
 void changePhotoName(double angel1 , double angel2 , char *name){
+    if (name ==NULL){
+
+        return;
+    }
     int len = strlen(name);
     for (int i = len-4; i <len ; ++i) {
         name[i]='\0';
@@ -769,7 +889,7 @@ void getZipName(char **zipName){
     }
 
     while ((entry = readdir(dir)) != NULL) {
-        if (strstr(entry->d_name, ".zip") != NULL) {
+        if ((strstr(entry->d_name, ".xls") != NULL) || (strstr(entry->d_name, ".zip") != NULL)) {
 
           *zipName = strdup(entry->d_name);
             printf("The zip file %s founded\n",*zipName);
@@ -780,8 +900,71 @@ void getZipName(char **zipName){
     closedir(dir);
 
 }
+void xlsToZip(char *xlsName){
+       int BUFFER_SIZE = 1024;
+        FILE *sourceFile, *destFile;
+        unsigned char buffer[BUFFER_SIZE];  // Buffer to hold data
+        size_t bytesRead;
 
+        // Open the source file in binary read mode
+        sourceFile = fopen(xlsName, "rb");
+        if (sourceFile == NULL) {
+            perror("Error opening source file");
+            return;
+        }
 
+        // Open the destination file in binary write mode
+        destFile = fopen("A.zip", "wb");
+        if (destFile == NULL) {
+            perror("Error opening destination file");
+            fclose(sourceFile);
+            return ;
+        }
+
+        // Read from source and write to destination
+        while ((bytesRead = fread(buffer, 1, BUFFER_SIZE, sourceFile)) > 0) {
+            fwrite(buffer, 1, bytesRead, destFile);
+        }
+
+        // Close files
+        fclose(sourceFile);
+        fclose(destFile);
+
+        printf("File copied successfully.\n");
+
+}
+void zipToXls(char *zipName){
+    int BUFFER_SIZE = 1024;
+    FILE *sourceFile, *destFile;
+    unsigned char buffer[BUFFER_SIZE];  // Buffer to hold data
+    size_t bytesRead;
+
+    // Open the source file in binary read mode
+    sourceFile = fopen(zipName, "rb");
+    if (sourceFile == NULL) {
+        perror("Error opening source file");
+        return;
+    }
+
+    // Open the destination file in binary write mode
+    destFile = fopen("photos/destination2.xlsx", "wb");
+    if (destFile == NULL) {
+        perror("Error opening destination file");
+        fclose(sourceFile);
+        return ;
+    }
+
+    // Read from source and write to destination
+    while ((bytesRead = fread(buffer, 1, BUFFER_SIZE, sourceFile)) > 0) {
+        fwrite(buffer, 1, bytesRead, destFile);
+    }
+
+    // Close files
+    fclose(sourceFile);
+    fclose(destFile);
+
+    printf("File copied successfully.\n");
+}
 
 int main() {
 
@@ -794,6 +977,7 @@ int main() {
     }
     char *fileName;
     getZipName(&fileName);
+   // xlsToZip(fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
     char *bmpFiles[3000];
@@ -829,7 +1013,7 @@ int main() {
     } else {
         printf("the logo cant read properly\n");
     }
-    transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2);
+   // transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2);
 
     for (int i = 0; i < logoHigh; i++) {
         for (int j = 0; j < logoWidth; j++) {
@@ -838,9 +1022,8 @@ int main() {
         free(logo[i]);
     }
     free(logo);
-    moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
-    char name[50] ="123450.bmp";
-
+    //moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
+   // zipToXls("A.zip");
     char end;
     scanf("%s" ,&end);
     return 0;
