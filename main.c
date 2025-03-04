@@ -208,19 +208,28 @@ void readFile(double *angel1, double *angel2, char **bmpFile, int bmpCount) {
     }
 }
 
-void sort(double angel1[], double angel2[], char **photoName, const int angelCount) {
+void sort(double* angel1, double* angel2, char **photoName, const int angelCount) {
     double difference[10000];
+
     for (int i = 0; i < angelCount; ++i) {
         difference[i] = fabs(angel1[i] - angel2[i]);
     }
+
+
     for (int i = 0; i < angelCount - 1; i++) {
         for (int j = 0; j < angelCount - i - 1; j++) {
             if (difference[j] > difference[j + 1]) {
-
                 double tempDiff = difference[j];
                 difference[j] = difference[j + 1];
                 difference[j + 1] = tempDiff;
 
+                double tempAngel1 = angel1[j];
+                angel1[j] = angel1[j + 1];
+                angel1[j + 1] = tempAngel1;
+
+                double tempAngel2 = angel2[j];
+                angel2[j] = angel2[j + 1];
+                angel2[j + 1] = tempAngel2;
 
                 char *tempPhoto = photoName[j];
                 photoName[j] = photoName[j + 1];
@@ -228,7 +237,6 @@ void sort(double angel1[], double angel2[], char **photoName, const int angelCou
             }
         }
     }
-
 }
 
 void extractZip(const char *fileName, const char *fileAddress) {
@@ -833,7 +841,6 @@ void xlsToZip(char **xlsName){
             fwrite(buffer, 1, bytesRead, destFile);
         }
 
-        // Close files
         fclose(sourceFile);
         fclose(destFile);
 
@@ -843,21 +850,18 @@ void xlsToZip(char **xlsName){
 void zipToXls(char *zipName){
     int BUFFER_SIZE = 1024;
     FILE *sourceFile, *destFile;
-    unsigned char buffer[BUFFER_SIZE];  // Buffer to hold data
+    unsigned char buffer[BUFFER_SIZE];
     size_t bytesRead;
 
-    // Open the source file in binary read mode
     sourceFile = fopen(zipName, "rb");
     if (sourceFile == NULL) {
         perror("Error opening source file");
         return;
     }
 
-    // Generate XLSX filename with folder
     char xlsName[300] = "photos/";  // Folder prefix
     char baseName[256];
 
-    // Extract filename from zipName
     const char *filePart = strrchr(zipName, '/');  // Find last '/'
     if (filePart) {
         filePart++;  // Move past '/'
@@ -865,7 +869,6 @@ void zipToXls(char *zipName){
         filePart = zipName;  // No path, just filename
     }
 
-    // Copy base filename and replace .zip with .xlsx
     strncpy(baseName, filePart, sizeof(baseName) - 1);
     baseName[sizeof(baseName) - 1] = '\0';  // Ensure null termination
     char *ext = strrchr(baseName, '.');
@@ -875,10 +878,8 @@ void zipToXls(char *zipName){
         strcat(baseName, ".xlsx");  // If no extension found, append ".xlsx"
     }
 
-    // Combine folder and filename
     strncat(xlsName, baseName, sizeof(xlsName) - strlen(xlsName) - 1);
 
-    // Open the destination file in binary write mode
     destFile = fopen(xlsName, "wb");
     if (destFile == NULL) {
         perror("Error opening destination file");
@@ -886,12 +887,10 @@ void zipToXls(char *zipName){
         return;
     }
 
-    // Read from source and write to destination
     while ((bytesRead = fread(buffer, 1, BUFFER_SIZE, sourceFile)) > 0) {
         fwrite(buffer, 1, bytesRead, destFile);
     }
 
-    // Close files
     fclose(sourceFile);
     fclose(destFile);
 
@@ -934,6 +933,7 @@ int main() {
     int logoWidth;
 
    readFile(angel1, angel2, bmpFiles, bmpCount);
+
     sort(angel1, angel2, bmpFiles, bmpCount);
 
     removeLineFromXML(bmpFiles, check, transferNumber);
