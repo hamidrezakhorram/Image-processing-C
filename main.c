@@ -897,8 +897,96 @@ void zipToXls(char *zipName){
     printf("File extracted successfully as: %s\n", xlsName);
 }
 
-int main() {
+void copyFile (const char *source, const char *destination) {
+    FILE *src, *dest;
+  const  int BUFFER_SIZE =4096;
+    char buffer[BUFFER_SIZE];
+    size_t bytesRead;
 
+    src = fopen(source, "rb");
+    if (src == NULL) {
+        perror("Error opening source file");
+        return;
+    }
+
+    dest = fopen(destination, "wb");
+    if (dest == NULL) {
+        perror("Error creating destination file");
+        fclose(src);
+        return;
+    }
+
+
+    while ((bytesRead = fread(buffer, 1, BUFFER_SIZE, src)) > 0) {
+        fwrite(buffer, 1, bytesRead, dest);
+    }
+
+    fclose(src);
+    fclose(dest);
+}
+
+void backupPhotos( char **image_files, int count) {
+    mkdir("backup");
+    for (int i = 0; i < count; i++) {
+        char destination[512];
+        snprintf(destination, sizeof(destination), "%s/%s", "backup", image_files[i]);
+        copyFile(image_files[i], destination);
+    }
+    printf("GET backup action completed successfully\n");
+
+}
+void restoreImages( char **image_files, int count) {
+    for (int i = 0; i < count; i++) {
+        char backup_path[512], original_path[512];
+
+        snprintf(backup_path, sizeof(backup_path), "%s/%s", "backup", image_files[i]);
+        snprintf(original_path, sizeof(original_path), "%s", image_files[i]);
+        copyFile(backup_path, original_path);
+    }
+    printf("Image files restroed\n");
+
+}
+
+
+void deleteBackupFolder() {
+    char backup[100]= "backup";
+    DIR *dir = opendir(backup);
+    struct dirent *entry;
+    char file_path[512];
+
+    if (dir == NULL) {
+        perror("Error opening backup directory");
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        snprintf(file_path, sizeof(file_path), "%s/%s", backup, entry->d_name);
+        if (remove(file_path) == 0) {
+           
+        } else {
+            perror("Error deleting file");
+        }
+    }
+
+    closedir(dir);
+
+
+    if (rmdir(backup) == 0) {
+        printf("Backup folder deleted successfully.\n");
+    } else {
+        perror("Error deleting backup folder");
+    }
+}
+
+
+int main() {
+    char *bmpFiles[10000];
+    char *backupBmpFiles[10000];
+    int bmpCount = readFolder(bmpFiles, 10000);
+    backupPhotos(bmpFiles , bmpCount);
     int checkRun = system("cd png2bmp &&  png2bmp.exe");
 
     if (checkRun == 0) {
@@ -911,8 +999,7 @@ int main() {
     xlsToZip(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
-    char *bmpFiles[10000];
-    int bmpCount = readFolder(bmpFiles, 10000);
+
 
     if (bmpCount == 0) {
         printf("No BMP files found in the folder.\n");
@@ -924,6 +1011,12 @@ int main() {
     for (int i = 0; i < 10000; ++i) {
         check[i] = 1;
     }
+    for (int i = 0; i < bmpCount; ++i) {
+        backupBmpFiles[i] = strdup(bmpFiles[i]);
+    }
+
+
+
 
     int angelCount = 0;
     int transferNumber = 10;
@@ -957,6 +1050,9 @@ int main() {
    moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
 
    zipToXls(fileName);
+
+    restoreImages(backupBmpFiles , bmpCount);
+    deleteBackupFolder();
     char end;
     scanf("%s" ,&end);
     return 0;
