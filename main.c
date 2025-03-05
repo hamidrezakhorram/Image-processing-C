@@ -513,7 +513,7 @@ void changePhotoName(double angel1 , double angel2 , char *name){
 
 
 void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] ) {
-    mkdir("photos");
+    mkdir("results");
     for (int i = 0; i < number; ++i) {
         char name[50];
         sprintf(name, "%s", photoName[i]);
@@ -525,7 +525,7 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
 
         sprintf(source, "%s", photoName[i]);
         changePhotoName(angel1[i],angel2[i], photoName[i]);
-        sprintf(destination, "photos/%s", photoName[i]);
+        sprintf(destination, "results/%s", photoName[i]);
         if (access(source, F_OK) != -1) {
             // Move file
             if (rename(source, destination) == 0) {
@@ -859,7 +859,7 @@ void zipToXls(char *zipName){
         return;
     }
 
-    char xlsName[300] = "photos/";  // Folder prefix
+    char xlsName[300] = "results/";  // Folder prefix
     char baseName[256];
 
     const char *filePart = strrchr(zipName, '/');  // Find last '/'
