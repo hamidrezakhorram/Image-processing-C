@@ -524,9 +524,7 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
     double checkAngel2=-1;
     char source[50], destination[50];
     for (int i = 0; i < number; ++i) {
-        printf("file is %s\n", photoName[i]);
-        printf(" angel1 %f angel2 %f \n",angel1[i],angel2[i]);
-        printf("check1 %f check2 %f\n",checkAngel1 , checkAngel2);
+
 
         if (angel1[i] !=checkAngel1 || angel2[i] != checkAngel2){
             sprintf(source, "%s", photoName[i]);
@@ -1066,13 +1064,13 @@ int main() {
    zipToXls(fileName);
     restoreImages(backupBmpFiles , bmpCount);
     deleteBackupFolder();
-//    int checkConvert = system("cd png2bmp &&  bmp2png.exe");
-//
-//    if (checkConvert == 0) {
-//        printf("bmp images converted to png\n");
-//    } else {
-//        printf("faild to convert bmp to png\n");
-//    }
+    int checkConvert = system("cd png2bmp &&  bmp2png.exe");
+
+    if (checkConvert == 0) {
+        printf("bmp images converted to png\n");
+    } else {
+        printf("faild to convert bmp to png\n");
+    }
     char end;
     scanf("%s" ,&end);
     return 0;
