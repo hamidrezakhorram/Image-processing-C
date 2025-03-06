@@ -938,17 +938,23 @@ void copyFile (const char *source, const char *destination) {
     fclose(dest);
 }
 
-void backupPhotos( char **image_files, int count) {
+void backupPhotos( char **image_files, int count,const char *xlsx_file) {
     mkdir("backup");
     for (int i = 0; i < count; i++) {
         char destination[512];
         snprintf(destination, sizeof(destination), "%s/%s", "backup", image_files[i]);
         copyFile(image_files[i], destination);
     }
-    printf("GET backup action completed successfully\n");
+    if (xlsx_file != NULL) {
+        char xlsx_destination[512];
+        snprintf(xlsx_destination, sizeof(xlsx_destination), "backup/%s", xlsx_file);
+        copyFile(xlsx_file, xlsx_destination);
+    }
+
+    printf("Backup action completed successfully\n");
 
 }
-void restoreImages( char **image_files, int count) {
+void restoreImages( char **image_files, int count , const char *xlsx_file) {
     for (int i = 0; i < count; i++) {
         char backup_path[512], original_path[512];
 
@@ -956,7 +962,18 @@ void restoreImages( char **image_files, int count) {
         snprintf(original_path, sizeof(original_path), "%s", image_files[i]);
         copyFile(backup_path, original_path);
     }
-    printf("Image files restroed\n");
+
+    if (xlsx_file != NULL) {
+        char xlsx_backup_path[512], xlsx_original_path[512];
+
+        snprintf(xlsx_backup_path, sizeof(xlsx_backup_path), "backup/%s", xlsx_file);
+        snprintf(xlsx_original_path, sizeof(xlsx_original_path), "%s", xlsx_file);
+
+        copyFile(xlsx_backup_path, xlsx_original_path);
+    }
+
+    printf("Image files and XLSX file restored successfully\n");
+
 
 }
 
@@ -999,7 +1016,9 @@ int main() {
     char *bmpFiles[10000];
     char *backupBmpFiles[10000];
     int bmpCount = readFolder(bmpFiles, 10000);
-    backupPhotos(bmpFiles , bmpCount);
+    char *fileName;
+    getXmlName(&fileName);
+    backupPhotos(bmpFiles , bmpCount , fileName);
     int checkRun = system("cd png2bmp &&  png2bmp.exe");
 
     if (checkRun == 0) {
@@ -1007,8 +1026,8 @@ int main() {
     } else {
         printf("faild to convert png to bmp");
     }
-    char *fileName;
-    getXmlName(&fileName);
+
+
    // xlsToZip(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
@@ -1062,7 +1081,7 @@ int main() {
     free(logo);
    moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
    zipToXls(fileName);
-    restoreImages(backupBmpFiles , bmpCount);
+    restoreImages(backupBmpFiles , bmpCount,fileName);
     deleteBackupFolder();
     int checkConvert = system("cd png2bmp &&  bmp2png.exe");
 
