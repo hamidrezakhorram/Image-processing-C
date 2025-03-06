@@ -512,7 +512,7 @@ void changePhotoName(double angel1 , double angel2 , char *name){
 }
 
 
-void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] , int bmpCount) {
+void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] , int bmpCount ,char **bmpTransformFiles , int* transformCount ) {
     mkdir("results");
     for (int i = 0; i < number; ++i) {
         char name[50];
@@ -527,6 +527,7 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
 
 
         if (angel1[i] !=checkAngel1 || angel2[i] != checkAngel2){
+            bmpTransformFiles[(*transformCount)++] = strdup(photoName[i]);
             sprintf(source, "%s", photoName[i]);
             changePhotoName(angel1[i],angel2[i], photoName[i]);
             sprintf(destination, "results/%s", photoName[i]);
@@ -872,23 +873,23 @@ void zipToXls(char *zipName){
         return;
     }
 
-    char xlsName[300] = "results/";  // Folder prefix
+    char xlsName[300] = "results/";
     char baseName[256];
 
-    const char *filePart = strrchr(zipName, '/');  // Find last '/'
+    const char *filePart = strrchr(zipName, '/');
     if (filePart) {
-        filePart++;  // Move past '/'
+        filePart++;
     } else {
-        filePart = zipName;  // No path, just filename
+        filePart = zipName;
     }
 
     strncpy(baseName, filePart, sizeof(baseName) - 1);
-    baseName[sizeof(baseName) - 1] = '\0';  // Ensure null termination
+    baseName[sizeof(baseName) - 1] = '\0';
     char *ext = strrchr(baseName, '.');
     if (ext != NULL) {
-        strcpy(ext, ".xlsx");  // Replace ".zip" with ".xlsx"
+        strcpy(ext, ".xlsx");
     } else {
-        strcat(baseName, ".xlsx");  // If no extension found, append ".xlsx"
+        strcat(baseName, ".xlsx");
     }
 
     strncat(xlsName, baseName, sizeof(xlsName) - strlen(xlsName) - 1);
@@ -1027,7 +1028,8 @@ int main() {
         printf("faild to convert png to bmp");
     }
 
-
+   char *bmpTransformeFiles [10000];
+    int transformCount =0;
    // xlsToZip(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
@@ -1061,7 +1063,7 @@ int main() {
 
     sort(angel1, angel2, bmpFiles, bmpCount);
 
-    removeLineFromXML(bmpFiles, check, transferNumber);
+
 
     unsigned char ***logo = readLogo(&logoHigh, &logoWidth);
 
@@ -1070,7 +1072,8 @@ int main() {
     } else {
         printf("the logo cant read properly\n");
     }
-   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2, bmpCount);
+   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2, bmpCount , bmpTransformeFiles , &transformCount);
+    removeLineFromXML(bmpTransformeFiles, check, transferNumber);
 
     for (int i = 0; i < logoHigh; i++) {
         for (int j = 0; j < logoWidth; j++) {
