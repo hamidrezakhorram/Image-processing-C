@@ -512,7 +512,7 @@ void changePhotoName(double angel1 , double angel2 , char *name){
 }
 
 
-void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] ) {
+void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] , int bmpCount) {
     mkdir("results");
     for (int i = 0; i < number; ++i) {
         char name[50];
@@ -520,23 +520,38 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
 
         readImage(logo, logoHeight, logoWidth, name);
     }
+    double checkAngel1=-1;
+    double checkAngel2=-1;
     char source[50], destination[50];
     for (int i = 0; i < number; ++i) {
+        printf("file is %s\n", photoName[i]);
+        printf(" angel1 %f angel2 %f \n",angel1[i],angel2[i]);
+        printf("check1 %f check2 %f\n",checkAngel1 , checkAngel2);
 
-        sprintf(source, "%s", photoName[i]);
-        changePhotoName(angel1[i],angel2[i], photoName[i]);
-        sprintf(destination, "results/%s", photoName[i]);
-        if (access(source, F_OK) != -1) {
-            // Move file
-            if (rename(source, destination) == 0) {
-                printf("Moved: %s -> %s\n", source, destination);
+        if (angel1[i] !=checkAngel1 || angel2[i] != checkAngel2){
+            sprintf(source, "%s", photoName[i]);
+            changePhotoName(angel1[i],angel2[i], photoName[i]);
+            sprintf(destination, "results/%s", photoName[i]);
+            if (access(source, F_OK) != -1) {
+                // Move file
+                if (rename(source, destination) == 0) {
+                    printf("Moved: %s -> %s\n", source, destination);
+                } else {
+                    perror("Error moving file");
+                }
             } else {
-                perror("Error moving file");
+                printf("Source file %s does not exist.\n", source);
             }
-        } else {
-            printf("Source file %s does not exist.\n", source);
+
+
+
+        }else if (number < bmpCount){
+               number++;
         }
+        checkAngel1 = angel1[i];
+        checkAngel2 = angel2[i];
     }
+
 
 
 }
@@ -965,7 +980,7 @@ void deleteBackupFolder() {
 
         snprintf(file_path, sizeof(file_path), "%s/%s", backup, entry->d_name);
         if (remove(file_path) == 0) {
-           
+
         } else {
             perror("Error deleting file");
         }
@@ -996,7 +1011,7 @@ int main() {
     }
     char *fileName;
     getXmlName(&fileName);
-    xlsToZip(&fileName);
+   // xlsToZip(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
     extractZip(fileName, fileAddress);
 
@@ -1038,7 +1053,7 @@ int main() {
     } else {
         printf("the logo cant read properly\n");
     }
-   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2);
+   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2, bmpCount);
 
     for (int i = 0; i < logoHigh; i++) {
         for (int j = 0; j < logoWidth; j++) {
@@ -1048,11 +1063,16 @@ int main() {
     }
     free(logo);
    moveXml(fileName ,"sheet.xml" , "xl/worksheets/sheet.xml");
-
    zipToXls(fileName);
-
     restoreImages(backupBmpFiles , bmpCount);
     deleteBackupFolder();
+//    int checkConvert = system("cd png2bmp &&  bmp2png.exe");
+//
+//    if (checkConvert == 0) {
+//        printf("bmp images converted to png\n");
+//    } else {
+//        printf("faild to convert bmp to png\n");
+//    }
     char end;
     scanf("%s" ,&end);
     return 0;
