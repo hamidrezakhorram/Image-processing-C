@@ -208,16 +208,16 @@ void readFile(double *angel1, double *angel2, char **bmpFile, int bmpCount) {
     }
 }
 
-void sort(double* angel1, double* angel2, char **photoName, const int angelCount) {
+void sort(double* angel1, double* angel2, char **photoName, int* angelCount) {
     double difference[10000];
 
-    for (int i = 0; i < angelCount; ++i) {
+    for (int i = 0; i < *angelCount; ++i) {
         difference[i] = fabs(angel1[i] - angel2[i]);
     }
 
 
-    for (int i = 0; i < angelCount - 1; i++) {
-        for (int j = 0; j < angelCount - i - 1; j++) {
+    for (int i = 0; i < *angelCount - 1; i++) {
+        for (int j = 0; j < *angelCount - i - 1; j++) {
             if (difference[j] > difference[j + 1]) {
                 double tempDiff = difference[j];
                 difference[j] = difference[j + 1];
@@ -237,6 +237,18 @@ void sort(double* angel1, double* angel2, char **photoName, const int angelCount
             }
         }
     }
+    int newCount = 0;
+    for (int i = 0; i < *angelCount; i++) {
+        if (i == 0 || (angel1[i] != angel1[i - 1] || angel2[i] != angel2[i - 1])) {
+
+            angel1[newCount] = angel1[i];
+            angel2[newCount] = angel2[i];
+            photoName[newCount] = photoName[i];
+            newCount++;
+        }
+    }
+
+    *angelCount = newCount;
 }
 
 void extractZip(const char *fileName, const char *fileAddress) {
@@ -512,7 +524,7 @@ void changePhotoName(double angel1 , double angel2 , char *name){
 }
 
 
-void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] , int bmpCount ,char **bmpTransformFiles , int* transformCount ) {
+void transferPhoto(char **photoName, int number, unsigned char ***logo, int logoHeight, int logoWidth ,double angel1[] , double angel2[] , int bmpCount ) {
     mkdir("results");
     for (int i = 0; i < number; ++i) {
         char name[50];
@@ -526,8 +538,8 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
     for (int i = 0; i < number; ++i) {
 
 
-        if (angel1[i] !=checkAngel1 || angel2[i] != checkAngel2){
-            bmpTransformFiles[(*transformCount)++] = strdup(photoName[i]);
+
+
             sprintf(source, "%s", photoName[i]);
             changePhotoName(angel1[i],angel2[i], photoName[i]);
             sprintf(destination, "results/%s", photoName[i]);
@@ -540,15 +552,8 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
                 }
             } else {
                 printf("Source file %s does not exist.\n", source);
+
             }
-
-
-
-        }else if (number < bmpCount){
-               number++;
-        }
-        checkAngel1 = angel1[i];
-        checkAngel2 = angel2[i];
     }
 
 
@@ -1028,7 +1033,7 @@ int main() {
         printf("faild to convert png to bmp");
     }
 
-   char *bmpTransformeFiles [10000];
+
     int transformCount =0;
    // xlsToZip(&fileName);
     const char *fileAddress = "xl/worksheets/sheet.xml";
@@ -1061,8 +1066,10 @@ int main() {
 
    readFile(angel1, angel2, bmpFiles, bmpCount);
 
-    sort(angel1, angel2, bmpFiles, bmpCount);
-
+    sort(angel1, angel2, bmpFiles, &bmpCount);
+    for (int i = 0; i < transferNumber; ++i) {
+        printf("file is %s\n", bmpFiles[i]);
+    }
 
 
     unsigned char ***logo = readLogo(&logoHigh, &logoWidth);
@@ -1072,8 +1079,8 @@ int main() {
     } else {
         printf("the logo cant read properly\n");
     }
-   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2, bmpCount , bmpTransformeFiles , &transformCount);
-    removeLineFromXML(bmpTransformeFiles, check, transferNumber);
+   transferPhoto(bmpFiles, transferNumber, logo, logoHigh, logoWidth ,angel1 ,angel2, bmpCount );
+    removeLineFromXML(bmpFiles, check, transferNumber);
 
     for (int i = 0; i < logoHigh; i++) {
         for (int j = 0; j < logoWidth; j++) {
