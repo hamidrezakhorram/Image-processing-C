@@ -297,7 +297,7 @@ int checkStart(const char *str) {
     return (endptr != str && *endptr == '\0');
 }
 
-void readXml(int *check, int name, char **nameXml, int *nameCount , double angel1 , double angel2 , double angel1List[] , double angel2List[]) {
+void readXml(int *check, int name, char **nameXml, int *nameCount , double angel1 , double angel2 , double angel1List[] , double angel2List[], int *lastSavedName) {
     int checkCount = 0;
     int rowCount = 0;
     char line[1000000];
@@ -327,7 +327,6 @@ void readXml(int *check, int name, char **nameXml, int *nameCount , double angel
 
                     int value = getName(start);
                     if (name == value) {
-                        printf("name %d  angel1 %f angel2 %f angel1list %f angel2list %f\n",name,angel1,angel2 , angel1List[checkCount] , angel2List[checkCount]);
 //                        check[checkCount] = 0;
 //                        nameXml[*nameCount] = malloc(strlen(start) + 1);
 //                        if (!nameXml[*nameCount]) {
@@ -337,7 +336,8 @@ void readXml(int *check, int name, char **nameXml, int *nameCount , double angel
 //                        }
 //                        strcpy(nameXml[*nameCount], start);
 //                        (*nameCount)++;
-                        if ((fabs(angel1 - angel1List[checkCount]) < EPSILON) &&fabs(angel2 - angel2List[checkCount]) < EPSILON){
+                        if ((fabs(angel1 - angel1List[checkCount]) < EPSILON) &&fabs(angel2 - angel2List[checkCount]) < EPSILON && (*lastSavedName)!=name){
+                            *lastSavedName= name;
                             nameXml[*nameCount] = malloc(strlen(start) + 1);
                             if (!nameXml[*nameCount]) {
                                 printf("Memory allocation error!\n");
@@ -354,8 +354,8 @@ void readXml(int *check, int name, char **nameXml, int *nameCount , double angel
 
                     int value = getName(start);
                     if (name == value) {
-                        printf("name %d  angel1 %f angel2 %f angel1list %f angel2list %f\n",name,angel1,angel2 , angel1List[checkCount] , angel2List[checkCount]);
-                        if ((fabs(angel1 - angel1List[checkCount]) < EPSILON) &&fabs(angel2 - angel2List[checkCount]) < EPSILON){
+                        if ((fabs(angel1 - angel1List[checkCount]) < EPSILON) &&fabs(angel2 - angel2List[checkCount]) < EPSILON  && (*lastSavedName)!=name){
+                            *lastSavedName = name;
                             nameXml[*nameCount] = malloc(strlen(start) + 1);
                             if (!nameXml[*nameCount]) {
                                 printf("Memory allocation error!\n");
@@ -438,11 +438,12 @@ void readXmlAngel(double *angel1List , double *angel2List ){
 void findRows(char **bmpfile, int transforNumber, int *check, char **namexml, int *namexmlCount , double angel1[] ,double angel2[]) {
     double angel1List[10000]={0.0};
     double angel2List[10000]={0.0};
+    int lastSavedName = -1;
     readXmlAngel(angel1List , angel2List);
 
     for (int i = 0; i < transforNumber; ++i) {
         int name = strtol(bmpfile[i], NULL, 10);
-        readXml(check, name, namexml, namexmlCount , angel1[i], angel2[i],angel1List , angel2List);
+        readXml(check, name, namexml, namexmlCount , angel1[i], angel2[i],angel1List , angel2List ,&lastSavedName);
     }
 
 
@@ -481,11 +482,7 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber , double a
 
     char *nameXml[10000] = {NULL};
     findRows(bmpFile, transformNumber, check, nameXml, &namexmlCount , angel1 ,angel2);
-    for (int i = 0; i < 10000; ++i) {
-        if (check[i]==0){
-            printf("check %d\n" , i);
-        }
-    }
+
 
     const char *filename = "sheet.xml";
     const char *newFilename = "sheet_modified.xml";
@@ -549,7 +546,7 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber , double a
             if(check[rowCount-3]==0){
                 row_should_be_kept=1;
                 printf(">>> Match Found: %d\n",rowCount);
-                printf("%.*s\n", (int)(row_end - row_start), row_start);
+               // printf("%.*s\n", (int)(row_end - row_start), row_start);
 
             }
             if (row_should_be_kept) {
@@ -568,7 +565,7 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber , double a
         pos = row_end;
         rowCount++;
     }
-    printf("xml count is %d\n",namexmlCount);
+
 
     fwrite(pos, 1, strlen(pos), output);
     fclose(output);
@@ -1150,9 +1147,7 @@ int main() {
     readFile(angel1, angel2, bmpFiles, bmpCount);
 
     sort(angel1, angel2, bmpFiles, &bmpCount);
-    for (int i = 0; i < transferNumber; ++i) {
-        printf("file is %s\n", bmpFiles[i]);
-    }
+
 
 
     unsigned char ***logo = readLogo(&logoHigh, &logoWidth);
