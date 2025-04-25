@@ -1,0 +1,1 @@
+ "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/debug/lib/minizip.lib" "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/lib/zlib.lib" -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

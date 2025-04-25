@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="zipopen"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\vcpkg\;CMake Files\..\..\..\vcpkg\installed\;CMake Files\..\..\..\vcpkg\installed\x64-windows\;CMake Files\..\..\..\vcpkg\installed\x64-windows\share\;CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="zipopen">
+				<Option output="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/zipopen.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include/minizip"/>
+					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 zipopen"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="zipopen/fast">
+				<Option output="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/zipopen.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include/minizip"/>
+					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 zipopen/fast"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.2/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/main.c">
+			<Option target="zipopen"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
+		</Unit>
+		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

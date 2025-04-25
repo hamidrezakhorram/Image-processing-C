@@ -45,6 +45,21 @@
 		{
 			"isCMake" : true,
 			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeFindCodeBlocks.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/ProcessorCount.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
 			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeCInformation.cmake"
 		},
 		{
@@ -103,20 +118,11 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/minizip/minizipConfig.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeFindDependencyMacro.cmake"
+			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfigVersion.cmake"
 		},
 		{
 			"isExternal" : true,
-			"path" : "D:/C/New folder/vcpkg/installed/x64-mingw-static/share/unofficial-minizip/unofficial-minizipConfigVersion.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "D:/C/New folder/vcpkg/installed/x64-mingw-static/share/unofficial-minizip/unofficial-minizipConfig.cmake"
+			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfig.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -145,22 +151,22 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "D:/C/New folder/vcpkg/installed/x64-mingw-static/share/unofficial-minizip/unofficial-minizipTargets.cmake"
+			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets.cmake"
 		},
 		{
 			"isExternal" : true,
-			"path" : "D:/C/New folder/vcpkg/installed/x64-mingw-static/share/unofficial-minizip/unofficial-minizipTargets-debug.cmake"
+			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-debug.cmake"
 		},
 		{
 			"isExternal" : true,
-			"path" : "D:/C/New folder/vcpkg/installed/x64-mingw-static/share/unofficial-minizip/unofficial-minizipTargets-release.cmake"
+			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-release.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "D:/zipopen/cmake-build-debug",
-		"source" : "D:/zipopen"
+		"build" : "C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug",
+		"source" : "C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C"
 	},
 	"version" : 
 	{

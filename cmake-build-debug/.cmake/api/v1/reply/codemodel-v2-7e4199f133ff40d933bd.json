@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "zipopen::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-zipopen-Debug-4c05d5f8a473a67eec7a.json",
+					"jsonFile" : "target-zipopen-Debug-f1ec1b76a8cc364a8052.json",
 					"name" : "zipopen",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/zipopen/cmake-build-debug",
-		"source" : "D:/zipopen"
+		"build" : "C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug",
+		"source" : "C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C"
 	},
 	"version" : 
 	{

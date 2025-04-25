@@ -11,13 +11,13 @@ set(CMAKE_PREFIX_PATH "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows")
 
 # Find and link minizip
 set(minizip_DIR "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/minizip")
-find_package(minizip CONFIG REQUIRED)
+find_package(unofficial-minizip CONFIG REQUIRED)
 
 
 add_executable(zipopen  main.c)
 
 # Link libraries (minizip and OpenCV)
-target_link_libraries(zipopen PRIVATE minizip::minizip )
+target_link_libraries(zipopen PRIVATE unofficial::minizip::minizip )
 
 # Include OpenCV headers (if needed, OpenCV might already manage this)
 target_include_directories(zipopen PRIVATE )
