@@ -841,7 +841,7 @@ int moveXml(const char *zipFileName, const char *xmlFilenName, const char *zipEe
         unzClose(oldZip);
     }
 
-    // Create a new temporary ZIP
+
     zipFile newZip = zipOpen("temp.zip", APPEND_STATUS_CREATE);
     if (!newZip) {
         fprintf(stderr, "Failed to open new ZIP file\n");
@@ -1105,7 +1105,7 @@ int main() {
     int bmpCount = readFolder(bmpFiles, 10000);
     int backupBmpCount = bmpCount;
     char *fileName;
-    getXmlName(&fileName);
+   // getXmlName(&fileName);
     backupPhotos(bmpFiles, backupBmpCount, fileName);
     int checkRun = system("cd png2bmp &&  png2bmp.exe");
 
@@ -1117,9 +1117,15 @@ int main() {
 
 
     int transformCount = 0;
-    // xlsToZip(&fileName);
-    const char *fileAddress = "xl/worksheets/sheet.xml";
-    extractZip(fileName, fileAddress);
+    const char *fileAddress = "xl/worksheets/sheet.xml";// xlsToZip(&fileName);
+    int checkExtracZip = system("extractZip.exe");
+
+    if (checkExtracZip == 0) {
+        printf("XML extracted\n");
+    } else {
+        printf("XML Not extracted");
+    }
+    //extractZip(fileName, fileAddress);
 
 
     if (bmpCount == 0) {
