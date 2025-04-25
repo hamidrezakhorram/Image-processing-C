@@ -4,8 +4,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <dirent.h>
-#include <unzip.h>
-#include <zip.h>
+
 #include "logo_data.h"
 
 #pragma pack(push, 1)
@@ -38,11 +37,11 @@ int readImage(unsigned char ***logo, int logoHeight, int logoWidth, char *inputF
 unsigned char ***readLogo(int *height, int *width);
 
 int getData(double *rightAngel, double *leftAngel, const char *inputFilename) {
-    //const char *inputFilename = nameFile;
+
     FILE *fp = fopen(inputFilename, "rb");
     if (!fp) {
         printf("Error: Unable to open file %s\n", inputFilename);
-        return -1; // Error code
+        return -1;
     }
     struct bitMapFileHeader fileHeader;
     fread(&fileHeader, sizeof(struct bitMapFileHeader), 1, fp);
@@ -251,35 +250,7 @@ void sort(double *angel1, double *angel2, char **photoName, int *angelCount) {
     *angelCount = newCount;
 }
 
-void extractZip(const char *fileName, const char *fileAddress) {
-    unzFile zipFile = unzOpen(fileName);
-    if (!zipFile) {
-        printf("Could not open ZIP file: %s\n", fileName);
-        return;
-    } else if (unzLocateFile(zipFile, fileAddress, 0) != UNZ_OK) {
-        printf("File %s not found in ZIP archive\n", fileAddress);
-        return;
 
-    } else if (unzOpenCurrentFile(zipFile) != UNZ_OK) {
-        printf("Could not open file inside ZIP\n");
-        unzClose(zipFile);
-        return;
-    }
-    FILE *fptr;
-
-    fptr = fopen("sheet.xml", "wb");
-
-
-    char buffer[4096];
-    int bytes_read;
-    while ((bytes_read = unzReadCurrentFile(zipFile, buffer, sizeof(buffer))) > 0) {
-        fwrite(buffer, 1, bytes_read, fptr);
-    }
-    fclose(fptr);
-    printf("File extracted successfully \n");
-    unzCloseCurrentFile(zipFile);
-    unzClose(zipFile);
-}
 
 int getName(const char *time) {
     int hours, minutes, seconds;
@@ -292,7 +263,7 @@ int getName(const char *time) {
 
 int checkStart(const char *str) {
     char *endptr;
-    double val = strtod(str, &endptr);  // Convert to double
+    double val = strtod(str, &endptr);
 
     return (endptr != str && *endptr == '\0');
 }
@@ -327,15 +298,7 @@ void readXml(int *check, int name, char **nameXml, int *nameCount , double angel
 
                     int value = getName(start);
                     if (name == value) {
-//                        check[checkCount] = 0;
-//                        nameXml[*nameCount] = malloc(strlen(start) + 1);
-//                        if (!nameXml[*nameCount]) {
-//                            printf("Memory allocation error!\n");
-//                            fclose(fptr);
-//                            return;
-//                        }
-//                        strcpy(nameXml[*nameCount], start);
-//                        (*nameCount)++;
+
                         if ((fabs(angel1 - angel1List[checkCount]) < EPSILON) &&fabs(angel2 - angel2List[checkCount]) < EPSILON && (*lastSavedName)!=name){
                             *lastSavedName= name;
                             nameXml[*nameCount] = malloc(strlen(start) + 1);
@@ -527,35 +490,25 @@ int removeLineFromXML(char **bmpFile, int *check, int transformNumber , double a
         char datetime[100] = "";
 
 
-        char rowBuffer[5000];  // Adjust the size as needed
+        char rowBuffer[5000];
         snprintf(rowBuffer, sizeof(rowBuffer), "%.*s", (int) (row_end - row_start), row_start);
-        // printf("the row is %s\n" , rowBuffer);
+
         extractDateTime(rowBuffer, datetime);
-        // printf("the datetime is %s\n" , datetime);
-        // printf("\nProcessing Row:\n%.*s\n", (int)(row_end - row_start), row_start);  // Debugging Output
+
         if (rowCount >=3) {
             int row_should_be_kept = 0;
-//            for (int i = 0; i < namexmlCount; ++i) {
-//
-//                if (strcmp(nameXml[i], datetime) == 0) {
-//                    row_should_be_kept = 1;
-//                    printf(">>> Match Found: %s\n", nameXml[i]);
-//                    break;
-//                }
-//            }
+
             if(check[rowCount-3]==0){
                 row_should_be_kept=1;
                 printf(">>> Match Found: %d\n",rowCount);
-               // printf("%.*s\n", (int)(row_end - row_start), row_start);
+
 
             }
             if (row_should_be_kept) {
                 fwrite(pos, 1, row_start - pos, output);
                 fwrite(row_start, 1, row_end - row_start, output);
             }
-//        } else {
-//            printf(">>> Row Removed!\n");
-//        }
+
         } else {
             fwrite(pos, 1, row_start - pos, output);
             fwrite(row_start, 1, row_end - row_start, output);
@@ -609,8 +562,7 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
 
         readImage(logo, logoHeight, logoWidth, name);
     }
-    double checkAngel1 = -1;
-    double checkAngel2 = -1;
+
     char source[50], destination[50];
     for (int i = 0; i < number; ++i) {
 
@@ -619,7 +571,7 @@ void transferPhoto(char **photoName, int number, unsigned char ***logo, int logo
         changePhotoName(angel1[i], angel2[i], photoName[i]);
         sprintf(destination, "results/%s", photoName[i]);
         if (access(source, F_OK) != -1) {
-            // Move file
+
             if (rename(source, destination) == 0) {
                 printf("Moved: %s -> %s\n", source, destination);
             } else {
@@ -645,7 +597,7 @@ unsigned char ***readLogo(int *height, int *width) {
 
     *width = infoHeader.biWidth;
     *height = abs(infoHeader.biHeight);
-    int row_padded = ((*width) * 3 + 3) & (~3); // BMP row alignment
+    int row_padded = ((*width) * 3 + 3) & (~3);
     unsigned char ***logo = (unsigned char ***) malloc((*height) * sizeof(unsigned char **));
     if (!logo) return NULL;
 
@@ -772,115 +724,8 @@ int readImage(unsigned char ***logo, int logoHeight, int logoWidth, char *inputF
     return 0;
 }
 
-int fileExistsZip(unzFile zip, const char *fileCheck) {
-    if (unzGoToFirstFile(zip) != UNZ_OK) return 0;  // Move to first file in ZIP
-    char filename_in_zip[256];
-
-    do {
-        unz_file_info file_info;
-        unzGetCurrentFileInfo(zip, &file_info, filename_in_zip, sizeof(filename_in_zip), NULL, 0, NULL, 0);
-
-        if (strcmp(filename_in_zip, fileCheck) == 0) {
-            return 1;
-        }
-    } while (unzGoToNextFile(zip) == UNZ_OK);
-
-    return 0;
-}
-
-int copyExistingFiles(zipFile newZip, const char *oldZipFileName, const char *skipFile) {
-    int CHUNK = 16384;
-    unzFile old_zip = unzOpen(oldZipFileName);
-    if (!old_zip) return 0;
-
-    char filename_in_zip[256];
-    char buffer[CHUNK];
-
-    if (unzGoToFirstFile(old_zip) != UNZ_OK) return 0;
-
-    do {
-
-        unz_file_info file_info;
-        unzGetCurrentFileInfo(old_zip, &file_info, filename_in_zip, sizeof(filename_in_zip), NULL, 0, NULL, 0);
 
 
-        if (strcmp(filename_in_zip, skipFile) == 0) continue;
-
-
-        if (unzOpenCurrentFile(old_zip) != UNZ_OK) return 0;
-
-
-        if (zipOpenNewFileInZip(newZip, filename_in_zip, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED,
-                                Z_DEFAULT_COMPRESSION) != ZIP_OK) {
-            unzCloseCurrentFile(old_zip);
-            return 0;
-        }
-
-
-        int bytes_read;
-        while ((bytes_read = unzReadCurrentFile(old_zip, buffer, CHUNK)) > 0) {
-            zipWriteInFileInZip(newZip, buffer, bytes_read);
-        }
-
-
-        unzCloseCurrentFile(old_zip);
-        zipCloseFileInZip(newZip);
-    } while (unzGoToNextFile(old_zip) == UNZ_OK);
-
-    unzClose(old_zip);
-    return 1;
-}
-
-int moveXml(const char *zipFileName, const char *xmlFilenName, const char *zipEentryName) {
-    int CHUNK = 16384;
-    unzFile oldZip = unzOpen(zipFileName);
-    int fileExists = 0;
-
-    if (oldZip) {
-        fileExists = fileExistsZip(oldZip, zipEentryName);
-        unzClose(oldZip);
-    }
-
-
-    zipFile newZip = zipOpen("temp.zip", APPEND_STATUS_CREATE);
-    if (!newZip) {
-        fprintf(stderr, "Failed to open new ZIP file\n");
-        return 1;
-    }
-
-    copyExistingFiles(newZip, zipFileName, fileExists ? zipEentryName : NULL);
-
-    FILE *file = fopen(xmlFilenName, "rb");
-    if (!file) {
-        fprintf(stderr, "Failed to open XML file\n");
-        zipClose(newZip, NULL);
-        return 1;
-    }
-
-    if (zipOpenNewFileInZip(newZip, zipEentryName, NULL, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION) !=
-        ZIP_OK) {
-        fprintf(stderr, "Failed to add file to ZIP\n");
-        fclose(file);
-        zipClose(newZip, NULL);
-        return 1;
-    }
-
-    char buffer[CHUNK];
-    int bytes_read;
-    while ((bytes_read = fread(buffer, 1, CHUNK, file)) > 0) {
-        zipWriteInFileInZip(newZip, buffer, bytes_read);
-    }
-
-    fclose(file);
-    zipCloseFileInZip(newZip);
-    zipClose(newZip, NULL);
-
-    remove(zipFileName);
-    rename("temp.zip", zipFileName);
-
-    printf("Successfully %s %s in %s\n", fileExists ? "replaced" : "added", zipEentryName, zipFileName);
-    return 0;
-}
 
 void getXmlName(char **zipName) {
     char folderPath[50];
@@ -908,43 +753,6 @@ void getXmlName(char **zipName) {
 
 }
 
-void xlsToZip(char **xlsName) {
-    int BUFFER_SIZE = 1024;
-    FILE *sourceFile, *destFile;
-    unsigned char buffer[BUFFER_SIZE];
-    size_t bytesRead;
-
-    sourceFile = fopen(*xlsName, "rb");
-    if (sourceFile == NULL) {
-        perror("Error opening source file");
-        return;
-    }
-    char zipName[256];
-    strncpy(zipName, *xlsName, sizeof(zipName));
-    char *ext = strrchr(zipName, '.');
-    if (ext != NULL) {
-        strcpy(ext, ".zip");
-    } else {
-        strcat(zipName, ".zip");
-    }
-
-    destFile = fopen(zipName, "wb");
-    if (destFile == NULL) {
-        perror("Error opening destination file");
-        fclose(sourceFile);
-        return;
-    }
-    strncpy(*xlsName, zipName, sizeof(xlsName));
-    while ((bytesRead = fread(buffer, 1, BUFFER_SIZE, sourceFile)) > 0) {
-        fwrite(buffer, 1, bytesRead, destFile);
-    }
-
-    fclose(sourceFile);
-    fclose(destFile);
-
-    printf("File copied successfully.\n");
-
-}
 
 void zipToXls(char *zipName) {
     int BUFFER_SIZE = 1024;
@@ -1114,7 +922,7 @@ int main() {
     } else {
         printf("faild to convert png to bmp");
     }
-    
+
     int checkExtracZip = system("extractZip.exe");
     if (checkExtracZip == 0) {
         printf("XML extracted\n");

@@ -115,51 +115,6 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfigVersion.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfig.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/CMakeFindDependencyMacro.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/FindZLIB.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/SelectLibraryConfigurations.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "C:/Program Files/JetBrains/CLion 2022.2/bin/cmake/win/share/cmake-3.23/Modules/FindPackageMessage.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-debug.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-release.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

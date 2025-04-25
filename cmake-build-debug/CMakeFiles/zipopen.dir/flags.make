@@ -4,7 +4,7 @@
 # compile C with C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/gcc.exe
 C_DEFINES = 
 
-C_INCLUDES = @CMakeFiles/zipopen.dir/includes_C.rsp
+C_INCLUDES = 
 
 C_FLAGS = -g
 

@@ -5,7 +5,7 @@
 		<Option title="zipopen"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\vcpkg\;CMake Files\..\..\..\vcpkg\installed\;CMake Files\..\..\..\vcpkg\installed\x64-windows\;CMake Files\..\..\..\vcpkg\installed\x64-windows\share\;CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\;"/>
+		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/cmake-build-debug"/>
@@ -24,8 +24,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include/minizip"/>
-					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
@@ -45,8 +43,6 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include/minizip"/>
-					<Add directory="C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2022.2/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
@@ -85,21 +81,6 @@
 		</Unit>
 		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
-		</Unit>
-		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
-		</Unit>
-		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipConfigVersion.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
-		</Unit>
-		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-debug.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
-		</Unit>
-		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
-		</Unit>
-		<Unit filename="C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/../../../vcpkg/installed/x64-windows/share/unofficial-minizip/unofficial-minizipTargets.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\vcpkg\installed\x64-windows\share\unofficial-minizip\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>

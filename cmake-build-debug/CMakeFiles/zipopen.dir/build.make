@@ -69,7 +69,6 @@ include CMakeFiles/zipopen.dir/progress.make
 include CMakeFiles/zipopen.dir/flags.make
 
 CMakeFiles/zipopen.dir/main.c.obj: CMakeFiles/zipopen.dir/flags.make
-CMakeFiles/zipopen.dir/main.c.obj: CMakeFiles/zipopen.dir/includes_C.rsp
 CMakeFiles/zipopen.dir/main.c.obj: ../main.c
 CMakeFiles/zipopen.dir/main.c.obj: CMakeFiles/zipopen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\DANA-RAYANEH\Documents\GitHub\Image-processing-C\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/zipopen.dir/main.c.obj"
@@ -92,8 +91,6 @@ zipopen_EXTERNAL_OBJECTS =
 
 zipopen.exe: CMakeFiles/zipopen.dir/main.c.obj
 zipopen.exe: CMakeFiles/zipopen.dir/build.make
-zipopen.exe: C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/debug/lib/minizip.lib
-zipopen.exe: C:/Users/DANA-RAYANEH/vcpkg/installed/x64-windows/lib/zlib.lib
 zipopen.exe: CMakeFiles/zipopen.dir/linklibs.rsp
 zipopen.exe: CMakeFiles/zipopen.dir/objects1.rsp
 zipopen.exe: CMakeFiles/zipopen.dir/link.txt
