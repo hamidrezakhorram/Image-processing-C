@@ -1105,7 +1105,7 @@ int main() {
     int bmpCount = readFolder(bmpFiles, 10000);
     int backupBmpCount = bmpCount;
     char *fileName;
-   // getXmlName(&fileName);
+    getXmlName(&fileName);
     backupPhotos(bmpFiles, backupBmpCount, fileName);
     int checkRun = system("cd png2bmp &&  png2bmp.exe");
 
@@ -1114,18 +1114,14 @@ int main() {
     } else {
         printf("faild to convert png to bmp");
     }
-
-
-    int transformCount = 0;
-    const char *fileAddress = "xl/worksheets/sheet.xml";// xlsToZip(&fileName);
+    
     int checkExtracZip = system("extractZip.exe");
-
     if (checkExtracZip == 0) {
         printf("XML extracted\n");
     } else {
         printf("XML Not extracted");
     }
-    //extractZip(fileName, fileAddress);
+
 
 
     if (bmpCount == 0) {
@@ -1173,7 +1169,14 @@ int main() {
         free(logo[i]);
     }
     free(logo);
-    moveXml(fileName, "sheet.xml", "xl/worksheets/sheet.xml");
+    //moveXml(fileName, "sheet.xml", "xl/worksheets/sheet.xml");
+
+    int checkXmlToZip = system("xmlToZip.exe");
+    if (checkXmlToZip == 0) {
+        printf("XML converted to Zip\n");
+    } else {
+        printf("XML Not converted to Zip");
+    }
     zipToXls(fileName);
     restoreImages(backupBmpFiles, backupBmpCount, fileName);
     deleteBackupFolder();

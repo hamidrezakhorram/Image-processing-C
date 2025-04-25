@@ -1,0 +1,3 @@
+C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/xmlToZip/cmake-build-debug/CMakeFiles/xmlToZip.dir
+C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/xmlToZip/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/DANA-RAYANEH/Documents/GitHub/Image-processing-C/xmlToZip/cmake-build-debug/CMakeFiles/rebuild_cache.dir
